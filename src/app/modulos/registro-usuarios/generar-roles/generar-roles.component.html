@@ -1,0 +1,55 @@
+<!-----------al dia------->
+  <mat-card class="example-card">
+    <br>
+    <mat-card-title style="text-align: center;font-size: 25px"><strong>EDICIÓN DE USUARIOS</strong></mat-card-title>
+    <h3>Datos del Usuario :</h3>
+    <div class="grid">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Nombre: </mat-label>
+        <input matInput [value]=" user.nombre" disabled>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Telefono: </mat-label>
+        <input matInput [value]=" user.telefono" disabled>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Correo: </mat-label>
+        <input matInput [value]=" user.correo" disabled>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Dirección: </mat-label>
+        <input matInput [value]=" user.direccion" disabled>
+      </mat-form-field>
+
+      <div>
+
+      </div>
+
+    </div>
+
+    <h3>Roles :</h3>
+    <section>
+      <li class="list-group-item" *ngFor="let rol of listaRol">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            [checked]="rol.check"
+            id="{{ rol.id! }}"
+            (change)="onChange($event, rol)"
+            required
+          />
+          <label class="form-check-label" for="{{ rol.id! }}">
+            {{ rol.rolNombre }}
+          </label>
+        </div>
+      </li>
+    </section>
+    <br>
+    <button style="background: #ea6c7a" mat-button color="warn" (click)="irListaUsuarios()">VOLVER</button>
+    <button style="background: #8cadcb" mat-button color="primary" (click)="submit()">GUARDAR CAMBIOS</button>
+  </mat-card>
+

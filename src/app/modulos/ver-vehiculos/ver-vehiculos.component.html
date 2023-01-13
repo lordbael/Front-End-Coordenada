@@ -1,0 +1,134 @@
+<div class="center">
+  <mat-card-title>Lista de Vehiculos</mat-card-title>
+  <br>
+  <mat-card-subtitle>Vehiculos del servicio de APECS</mat-card-subtitle>
+</div>
+
+<button class="btn btn-success btncrear"  (click)="abrirdialogoVehiculos()" *ngIf="btncrearVh"><mat-icon>add</mat-icon>Nuevo Vehiculo</button>
+
+<mat-form-field class="buscarV">
+  <mat-label>Search</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
+</mat-form-field>
+<!----tabla---->
+<div class="mat-elevation-z8 center">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 " #tabla1>
+
+    <ng-container matColumnDef="id">
+      <th class="titulo" mat-header-cell *matHeaderCellDef> ID </th>
+      <td class="textmedia" mat-cell *matCellDef="let articulosVv"> {{articulosVv.id_vehiculo}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="clave">
+      <th class="titulo media" mat-header-cell *matHeaderCellDef> Clave</th>
+      <td class="media" mat-cell *matCellDef="let articulosVv"> {{articulosVv.clave}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="placa">
+      <th class="titulo" mat-header-cell *matHeaderCellDef> Placa </th>
+      <td class="textmedia" mat-cell *matCellDef="let articulosVv"> {{articulosVv.placa}} </td>
+    </ng-container>
+
+    <ng-container  matColumnDef="vehiculo">
+      <th class="titulo media1" mat-header-cell *matHeaderCellDef> Vehiculo </th>
+      <td class="media1" mat-cell *matCellDef="let articulosVv"> {{articulosVv.vehiculo}} </td>
+    </ng-container>
+
+    <ng-container  matColumnDef="año">
+      <th class="titulo media1" mat-header-cell *matHeaderCellDef> Año</th>
+      <td class="media1" mat-cell *matCellDef="let articulosVv"> {{articulosVv.anio}} </td>
+    </ng-container>
+
+    <ng-container  matColumnDef="kilometraje">
+      <th class="titulo media1" mat-header-cell *matHeaderCellDef> Kilometraje</th>
+      <td class="media1" mat-cell *matCellDef="let articulosVv"> {{articulosVv.kilometraje}} </td>
+    </ng-container>
+
+    <ng-container  matColumnDef="estado">
+      <th class="titulo media1" mat-header-cell *matHeaderCellDef>Estado</th>
+      <td class="media1" mat-cell *matCellDef="let articulosVv"> {{articulosVv.estado}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="editar" *ngIf="btncrearVh">
+      <th class="titulo" mat-header-cell *matHeaderCellDef> Editar </th>
+      <td mat-cell *matCellDef="let articulosVv"><button [routerLink]="['/nuevovehiculo',articulosVv.id_vehiculo]" ><mat-icon class="btnEdi">edit</mat-icon></button></td>
+    </ng-container>
+
+    <ng-container matColumnDef="eliminar" *ngIf="btncrearVh">
+      <th class="titulo" mat-header-cell *matHeaderCellDef> Eliminar </th>
+      <td mat-cell *matCellDef="let articulosVv"> <button ><mat-icon class="btnEli">delete</mat-icon></button></td>
+    </ng-container>
+
+    <ng-container matColumnDef="editar" *ngIf="!btncrearVh">
+      <th class="titulo" mat-header-cell *matHeaderCellDef> Cliente </th>
+      <td mat-cell *matCellDef="let articulosVv">{{articulosVv.cliente.nombre}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="eliminar" *ngIf="!btncrearVh">
+      <th class="titulo" mat-header-cell *matHeaderCellDef> Servicio </th>
+      <td mat-cell *matCellDef="let articulosVv">
+        <button (click)="descripcion(articulosVv.id_vehiculo)" title="En que servicio se encuentra"
+                mat-button color="primary"
+                *ngIf="articulosVv.estado=='En servicio'">
+          <mat-icon>remove_red_eye</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+  </table>
+  <mat-paginator class="center1" [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
+</div>
+
+<ng-template #dialogNvehiculo >
+  <form [formGroup]="ValidacionVehiculoFormGroup">
+  <h2> {{titulo}} </h2>
+  <mat-form-field appearance="outline" style="width: 100%">
+    <mat-label>Placa</mat-label>
+    <input matInput name="placa" [(ngModel)]="vehiculo.placa" formControlName="placa" id="placa" autocomplete="off"/>
+    <mat-error *ngIf="hasError('placa', 'required')">Placa del Vehiculo <strong>requerido</strong></mat-error>
+  </mat-form-field>
+  <br>
+  <mat-form-field appearance="outline" style="width: 100%">
+    <mat-label>Clave</mat-label>
+    <input type="number" matInput name="clave" [(ngModel)]="vehiculo.clave" formControlName="clave" id="clave" autocomplete="off"/>
+    <mat-error *ngIf="hasError('clave', 'required')">Clave del vehiculo <strong>requerido</strong></mat-error>
+  </mat-form-field>
+  <br>
+  <mat-form-field appearance="outline" style="width: 100%">
+    <mat-label>Año</mat-label>
+    <input type="number" matInput name="anio" [(ngModel)]="vehiculo.anio" formControlName="anio" id="anio" autocomplete="off"/>
+    <mat-error *ngIf="hasError('anio', 'required')">Año <strong>requerido</strong></mat-error>
+  </mat-form-field>
+  <br>
+  <mat-form-field appearance="outline" style="width: 100%">
+    <mat-label>Kilometro</mat-label>
+    <input type="number" matInput  name="kilometraje" [(ngModel)]="vehiculo.kilometraje" formControlName="kilometraje" id="kilometraje" autocomplete="off"/>
+    <span matSuffix>km</span>
+    <mat-error *ngIf="hasError('kilometraje', 'required')">Kilometraje <strong>requerido</strong></mat-error>
+  </mat-form-field>
+  <br>
+  <mat-form-field appearance="outline" style="width: 100%">
+    <mat-label> Nombre de Vehiculo</mat-label>
+    <input matInput name="vehiculo_n" [(ngModel)]="vehiculo.vehiculo" formControlName="vehiculo_n" id="vehiculo_n" autocomplete="off"/>
+    <mat-error *ngIf="hasError('vehiculo_n', 'required')">Nombre del vehiculo <strong>requerido</strong></mat-error>
+  </mat-form-field>
+  <br>
+  <button mat-button mat-dialog-close color="warn"><mat-icon>close</mat-icon> Cancelar</button>
+  <button mat-button mat-dialog-close color="primary"  (click)="crearVehiculo()" *ngIf="creating" [disabled]="!ValidacionVehiculoFormGroup.valid" ><mat-icon>save</mat-icon>Guardar</button>
+  </form>
+</ng-template>
+
+<ng-template #dialogdetallev >
+  <h2><strong>DETALLES</strong></h2>
+  <span>Fecha de instalación: <strong>{{detalle.fecha_inst}}</strong></span><br>
+  <span>Imei GPS: <strong>{{detalle.gps.imei_gps}}</strong></span><br>
+  <span>Modelo GPS<strong>{{detalle.gps.modelo.nombre}}</strong></span><br>
+  <span>Obervación:<strong>{{detalle.observacion}}</strong></span><br>
+  <span>Ubicacion: <strong>{{detalle.ubicacion}}</strong></span><br>
+  <br>
+  <button mat-button mat-dialog-close color="warn"><mat-icon>close</mat-icon> Cerrar</button>
+</ng-template>
+
+
